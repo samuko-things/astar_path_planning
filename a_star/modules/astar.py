@@ -16,6 +16,19 @@ show_animation = True  # change to false if you dont want the a_star plot to dis
 
 
 
+class Node:
+    def __init__(self, x, y, cost, parent_index):
+        self.x = x  # index of grid
+        self.y = y  # index of grid
+        self.cost = cost
+        self.parent_index = parent_index
+
+    def __str__(self):
+        return str(self.x) + "," + str(self.y) + "," + str(
+            self.cost) + "," + str(self.parent_index)
+        
+
+
 
 class AStarPlanner:
 
@@ -30,21 +43,6 @@ class AStarPlanner:
         self.obstacle_map = obstacle_map
         self.x_width, self.y_width = x_width, y_width
         self.motion = self.get_motion_model()
-
-
-
-
-    class Node:
-        def __init__(self, x, y, cost, parent_index):
-            self.x = x  # index of grid
-            self.y = y  # index of grid
-            self.cost = cost
-            self.parent_index = parent_index
-
-        def __str__(self):
-            return str(self.x) + "," + str(self.y) + "," + str(
-                self.cost) + "," + str(self.parent_index)
-
 
 
     def planning(self, sx, sy, gx, gy):
@@ -62,9 +60,9 @@ class AStarPlanner:
             ry: y position list of the final path grid positions
         """
 
-        start_node = self.Node(self.calc_xy_index(sx, self.min_x),
+        start_node = Node(self.calc_xy_index(sx, self.min_x),
                                self.calc_xy_index(sy, self.min_y), 0.0, -1)
-        goal_node = self.Node(self.calc_xy_index(gx, self.min_x),
+        goal_node = Node(self.calc_xy_index(gx, self.min_x),
                               self.calc_xy_index(gy, self.min_y), 0.0, -1)
 
         open_set, closed_set = dict(), dict()
@@ -114,7 +112,7 @@ class AStarPlanner:
 
             # expand_grid search grid based on motion model
             for i, _ in enumerate(self.motion):
-                node = self.Node(current.x + self.motion[i][0],
+                node = Node(current.x + self.motion[i][0],
                                  current.y + self.motion[i][1],
                                  current.cost + self.motion[i][2], c_id)
                 n_id = self.calc_grid_index(node)
