@@ -5,10 +5,6 @@ import modules.func as func
 import time
 
 
-show_animation = True
-
-
-
 
 ###################################################################################
 def actual_to_grid_pos(actual_pos, map_resolution):
@@ -67,7 +63,8 @@ def plan_and_smoothen_path(map_image_file, robot_radius_cm, map_resolution, curr
     plt.axis("equal")
 
 
-    a_star = astar.AStarPlanner(min_x, min_y, max_x, max_y, x_width, y_width, obstacle_map)
+    a_star = astar.AStarPlanner(min_x, min_y, max_x, max_y, x_width, y_width, obstacle_map,
+                                show_animation=False)
     rx, ry = a_star.planning(current_loc[x], current_loc[y], target_loc[x], target_loc[y])
     
     ax, ay = func.remove_redundant_path(rx, ry)
@@ -76,17 +73,16 @@ def plan_and_smoothen_path(map_image_file, robot_radius_cm, map_resolution, curr
     print("waiting for path smoothening ...")
     optimized_path_x, optimized_path_y = func.smoothen_path(astar_path_x, astar_path_y, a_star.obstacle_map, a_star.min_x, a_star.min_y)
 
-    plt.plot(ox, oy, ".k")
 
+    plt.plot(ox, oy, ".k")
     plt.plot(current_loc[x], current_loc[y], "ok")
     plt.plot(target_loc[x], target_loc[y], "ob")
-    
-    plt.grid(True)
-    plt.axis("equal")
-
     plt.plot(astar_path_x, astar_path_y, "-b")
     plt.plot(optimized_path_x, optimized_path_y, "-r")
+    plt.grid(True)
+    plt.axis("equal")
     
+
     return optimized_path_x, optimized_path_y, astar_path_x, astar_path_y
 
 ###################################################################################
@@ -113,11 +109,11 @@ if __name__ == '__main__':
     map_resolution = 10 # cm per grid based on the map
 
     # start and goal grid position and not the actual pos in cm
-    # sx, sy = 42, 75
-    # gx, gy = 94, 13
+    sx, sy = 42, 75
+    gx, gy = 94, 13
 
-    sx, sy = 15, 15
-    gx, gy = 90, 15
+    # sx, sy = 15, 15
+    # gx, gy = 90, 15
 
     # # start and goal actual position in cm
     # sx, sy = 120, 3080

@@ -32,11 +32,13 @@ class Node:
 
 class AStarPlanner:
 
-    def __init__(self, min_x, min_y, max_x, max_y, x_width, y_width, obstacle_map):
+    def __init__(self, min_x, min_y, max_x, max_y, x_width, y_width, obstacle_map, show_animation=False):
         """
         Initialize grid map for a star planning
         """
-
+        
+        self.show_animation = show_animation
+        
         self.resolution = 1
         self.min_x, self.min_y = min_x, min_y
         self.max_x, self.max_y = max_x, max_y
@@ -80,22 +82,21 @@ class AStarPlanner:
                                                                          o]))
             current = open_set[c_id]
 
-            '''
-            uncomment this to see the astar simulation on matplotlib during plotting
-            '''
-            # # show graph
-            # if show_animation:  # pragma: no cover
-            #     plt.plot(self.calc_grid_position(current.x, self.min_x),
-            #              self.calc_grid_position(current.y, self.min_y), "xc")
-            #     # for stopping simulation with the esc key.
-            #     plt.gcf().canvas.mpl_connect('key_release_event',
-            #                                  lambda event: [exit(
-            #                                      0) if event.key == 'escape' else None])
-            #     if len(closed_set.keys()) % 10 == 0:
-            #         plt.pause(0.001)
-            '''
+            
+            # uncomment this to see the astar simulation on matplotlib during plotting
+
+            # show graph
+            if self.show_animation:  # pragma: no cover
+                plt.plot(self.calc_grid_position(current.x, self.min_x),
+                         self.calc_grid_position(current.y, self.min_y), "xc")
+                # for stopping simulation with the esc key.
+                plt.gcf().canvas.mpl_connect('key_release_event',
+                                             lambda event: [exit(
+                                                 0) if event.key == 'escape' else None])
+                if len(closed_set.keys()) % 10 == 0:
+                    plt.pause(0.001)
+            
             #############################################################################
-            '''
 
             if current.x == goal_node.x and current.y == goal_node.y:
                 print("Find goal")
