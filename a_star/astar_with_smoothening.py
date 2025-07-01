@@ -71,7 +71,7 @@ def plan_and_smoothen_path(map_image_file, robot_radius_cm, map_resolution, curr
     astar_path_x, astar_path_y = func.reverse_list(ax), func.reverse_list(ay)
 
     print("waiting for path smoothening ...")
-    optimized_path_x, optimized_path_y = func.smoothen_path(astar_path_x, astar_path_y, a_star.obstacle_map, a_star.min_x, a_star.min_y)
+    optimized_path_x, optimized_path_y = func.new_smoothen_path(astar_path_x, astar_path_y, a_star.obstacle_map, a_star.min_x, a_star.min_y)
 
 
     plt.plot(ox, oy, ".k")
@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
     # start and goal grid position and not the actual pos in cm
     sx, sy = 42, 75
-    gx, gy = 94, 13
+    gx, gy = 86, 66
 
     # sx, sy = 15, 15
     # gx, gy = 90, 15

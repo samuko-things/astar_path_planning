@@ -1,5 +1,6 @@
 import math
 import pandas as pd
+from queue import Queue
 
 '''
 this contains functions for path optimization/smoothening algorithm, 
@@ -91,6 +92,65 @@ def cross_obstacle(lx, ly, obstacle_map, x_min, y_min):
     
     return obstacle
 #############################################################################
+
+
+#############################################################################
+
+def new_smoothen_path(path_x, path_y, obstacle_map, x_min, y_min, grid_size=1):
+    path_queue = Queue(maxsize=2)
+    new_path_x = []
+    new_path_y = []
+
+    no_of_paths = len(path_x)
+    touch_obstacle = False
+    i = 1
+
+    x_goal = path_x[no_of_paths-1]
+    y_goal = path_y[no_of_paths-1]
+
+    if no_of_paths == 1:
+        return new_path_x, new_path_y
+    
+    path_queue.put((path_x[0], path_y[0]))
+    new_path_x.append(path_x[0])
+    new_path_y.append(path_y[0])
+
+    x_start = path_x[0]
+    y_start = path_y[0]
+    
+    while i < no_of_paths:
+        path_queue.put((path_x[i], path_y[i]))
+
+        lx,ly = get_line([x_start, y_start], [path_x[i], path_y[i]])    
+        touch_obstacle = cross_obstacle(lx,ly,obstacle_map,x_min,y_min)
+            
+        if touch_obstacle:
+            next_path = path_queue.get()
+            new_path_x.append(next_path[0])
+            new_path_y.append(next_path[1])
+
+            x_start = next_path[0]
+            y_start = next_path[1]
+
+            path_queue.get()
+            path_queue.put(next_path)
+
+            touch_obstacle = False
+        
+        elif not touch_obstacle:
+            path_queue.get()
+            i+=1
+    
+    new_path_x.append(x_goal)
+    new_path_y.append(y_goal)  
+    return new_path_x, new_path_y
+
+        
+        
+
+
+
+################################################################################
 
 
 ################################################################################
